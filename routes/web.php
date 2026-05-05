@@ -2,13 +2,15 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LeaderboardController;
+use App\Http\Controllers\Faculty\QuizController as FacultyQuizController;
+use App\Http\Controllers\Student\QuizController as StudentQuizController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Redirect /dashboard based on role
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -25,6 +27,7 @@ Route::middleware(['auth', 'role:faculty'])->prefix('faculty')->name('faculty.')
     Route::get('/dashboard', function () {
         return view('faculty.dashboard');
     })->name('dashboard');
+    Route::resource('quizzes', FacultyQuizController::class);
 });
 
 // Student routes
@@ -32,9 +35,13 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::get('/dashboard', function () {
         return view('student.dashboard');
     })->name('dashboard');
+    Route::resource('quizzes', StudentQuizController::class)->only(['index', 'show']);
+    Route::post('/quizzes/{quiz}/submit', [StudentQuizController::class, 'submit'])->name('quizzes.submit');
 });
 
+// Leaderboard (all authenticated users)
 Route::middleware('auth')->group(function () {
+    Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
