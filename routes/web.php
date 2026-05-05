@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\Faculty\QuizController as FacultyQuizController;
+use App\Http\Controllers\Faculty\QuestionController as FacultyQuestionController;
 use App\Http\Controllers\Student\QuizController as StudentQuizController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,8 @@ Route::middleware(['auth', 'role:faculty'])->prefix('faculty')->name('faculty.')
         return view('faculty.dashboard');
     })->name('dashboard');
     Route::resource('quizzes', FacultyQuizController::class);
+    Route::post('/quizzes/{quiz}/questions', [FacultyQuestionController::class, 'store'])->name('questions.store');
+    Route::delete('/quizzes/{quiz}/questions/{question}', [FacultyQuestionController::class, 'destroy'])->name('questions.destroy');
 });
 
 // Student routes
