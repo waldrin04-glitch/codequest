@@ -15,8 +15,16 @@
                     <h3 class="font-bold text-lg">{{ $quiz->title }}</h3>
                     <p class="text-gray-600 text-sm mt-1">{{ $quiz->description }}</p>
                     <p class="text-sm text-gray-500 mt-2">⏱ {{ $quiz->time_limit }} mins | {{ $quiz->questions->count() }} questions</p>
-                    <a href="{{ route('student.quizzes.show', $quiz) }}"
-                        class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded">Take Quiz</a>
+                    <div class="flex gap-2 mt-4">
+                        <a href="{{ route('student.quizzes.show', $quiz) }}"
+                           class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm">
+                            Take Quiz
+                        </a>
+                        <a href="{{ route('student.quizzes.practice', $quiz) }}"
+                           class="inline-block bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 text-sm">
+                            Practice
+                        </a>
+                    </div>
                 </div>
                 @empty
                 <p class="text-gray-500">No quizzes available yet.</p>

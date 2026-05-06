@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\Faculty\CodingChallengeController as FacultyChallengeController;
+use App\Http\Controllers\Student\CodingChallengeController as StudentChallengeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\Faculty\QuizController as FacultyQuizController;
 use App\Http\Controllers\Faculty\QuestionController as FacultyQuestionController;
+use App\Http\Controllers\Faculty\AnalyticsController as FacultyAnalyticsController;
 use App\Http\Controllers\Student\QuizController as StudentQuizController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +34,8 @@ Route::middleware(['auth', 'role:faculty'])->prefix('faculty')->name('faculty.')
     Route::resource('quizzes', FacultyQuizController::class);
     Route::post('/quizzes/{quiz}/questions', [FacultyQuestionController::class, 'store'])->name('questions.store');
     Route::delete('/quizzes/{quiz}/questions/{question}', [FacultyQuestionController::class, 'destroy'])->name('questions.destroy');
+    Route::resource('challenges', FacultyChallengeController::class);
+    Route::get('/analytics', [FacultyAnalyticsController::class, 'index'])->name('analytics');
 });
 
 // Student routes
@@ -40,6 +45,11 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     })->name('dashboard');
     Route::resource('quizzes', StudentQuizController::class)->only(['index', 'show']);
     Route::post('/quizzes/{quiz}/submit', [StudentQuizController::class, 'submit'])->name('quizzes.submit');
+    Route::get('/quizzes/{quiz}/practice', [StudentQuizController::class, 'practice'])->name('quizzes.practice');
+    Route::post('/quizzes/{quiz}/practice', [StudentQuizController::class, 'practiceSubmit'])->name('quizzes.practice.submit');
+    Route::get('/challenges', [StudentChallengeController::class, 'index'])->name('challenges.index');
+    Route::get('/challenges/{challenge}', [StudentChallengeController::class, 'show'])->name('challenges.show');
+    Route::post('/challenges/{challenge}/submit', [StudentChallengeController::class, 'submit'])->name('challenges.submit');
 });
 
 // Leaderboard (all authenticated users)
