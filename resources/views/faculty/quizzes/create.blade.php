@@ -1,35 +1,48 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Create Quiz</h2>
+        <h2 class="font-semibold text-xl text-gray-200 leading-tight">
+            {{ __('Create a New Quiz') }}
+        </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white shadow-sm sm:rounded-lg p-6">
+        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-gray-800/50 backdrop-blur-lg border border-gray-700/50 shadow-2xl sm:rounded-2xl overflow-hidden">
                 <form method="POST" action="{{ route('faculty.quizzes.store') }}">
                     @csrf
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Title</label>
-                        <input type="text" name="title" value="{{ old('title') }}"
-                            class="w-full border rounded p-2" required>
-                        @error('title')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
-                    </div>
+                    <div class="p-6 sm:p-8">
+                        <div class="space-y-6">
+                            <div>
+                                <label for="title" class="block text-sm font-medium text-gray-300">Title</label>
+                                <div class="mt-1">
+                                    <input type="text" name="title" id="title" class="block w-full bg-gray-700/50 border-gray-600 rounded-md shadow-sm text-white focus:ring-sky-500 focus:border-sky-500 sm:text-sm" value="{{ old('title') }}" required>
+                                </div>
+                                @error('title')<p class="mt-2 text-sm text-red-400">{{ $message }}</p>@enderror
+                            </div>
 
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Description</label>
-                        <textarea name="description" rows="3"
-                            class="w-full border rounded p-2">{{ old('description') }}</textarea>
-                    </div>
+                            <div>
+                                <label for="description" class="block text-sm font-medium text-gray-300">Description</label>
+                                <div class="mt-1">
+                                    <textarea name="description" id="description" rows="4" class="block w-full bg-gray-700/50 border-gray-600 rounded-md shadow-sm text-white focus:ring-sky-500 focus:border-sky-500 sm:text-sm">{{ old('description') }}</textarea>
+                                </div>
+                                <p class="mt-2 text-sm text-gray-400">A brief description of the quiz.</p>
+                            </div>
 
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Time Limit (minutes)</label>
-                        <input type="number" name="time_limit" value="{{ old('time_limit', 30) }}"
-                            class="w-full border rounded p-2" min="1" required>
+                            <div>
+                                <label for="time_limit" class="block text-sm font-medium text-gray-300">Time Limit (minutes)</label>
+                                <div class="mt-1">
+                                    <input type="number" name="time_limit" id="time_limit" class="block w-full bg-gray-700/50 border-gray-600 rounded-md shadow-sm text-white focus:ring-sky-500 focus:border-sky-500 sm:text-sm" value="{{ old('time_limit', 30) }}" min="1" required>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="flex gap-2">
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Create Quiz</button>
-                        <a href="{{ route('faculty.quizzes.index') }}" class="bg-gray-300 text-gray-700 px-4 py-2 rounded">Cancel</a>
+                    <div class="px-6 py-4 bg-gray-800/60 border-t border-gray-700/50 flex justify-end gap-4">
+                        <a href="{{ route('faculty.quizzes.index') }}" class="px-4 py-2 text-sm font-medium text-gray-300 bg-gray-700/50 border border-gray-600 rounded-md shadow-sm hover:bg-gray-600/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-sky-500">
+                            Cancel
+                        </a>
+                        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-sky-600 border border-transparent rounded-md shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-sky-500">
+                            Create Quiz
+                        </button>
                     </div>
                 </form>
             </div>

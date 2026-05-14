@@ -33,6 +33,8 @@ Route::middleware(['auth', 'role:faculty'])->prefix('faculty')->name('faculty.')
     })->name('dashboard');
     Route::resource('quizzes', FacultyQuizController::class);
     Route::post('/quizzes/{quiz}/questions', [FacultyQuestionController::class, 'store'])->name('questions.store');
+    Route::get('/quizzes/{quiz}/questions/{question}/edit', [FacultyQuestionController::class, 'edit'])->name('questions.edit');
+    Route::patch('/quizzes/{quiz}/questions/{question}', [FacultyQuestionController::class, 'update'])->name('questions.update');
     Route::delete('/quizzes/{quiz}/questions/{question}', [FacultyQuestionController::class, 'destroy'])->name('questions.destroy');
     Route::resource('challenges', FacultyChallengeController::class);
     Route::get('/analytics', [FacultyAnalyticsController::class, 'index'])->name('analytics');

@@ -44,4 +44,39 @@ class QuestionController extends Controller
         $question->delete();
         return redirect()->route('faculty.quizzes.show', $quiz)->with('success', 'Question deleted!');
     }
+
+    public function edit(Quiz $quiz, Question $question)
+    {
+        return view('faculty.questions.edit', compact('quiz', 'question'));
+    }
+
+    public function update(Request $request, Quiz $quiz, Question $question)
+    {
+        $request->validate([
+            'content' => 'required|string',
+            'points' => 'required|integer|min:1',
+            'choices' => 'required|array|min:2',
+            'choices.*' => 'required|string',
+            'correct' => 'required|integer',
+        ]);
+
+        $question->update([
+            'content' => $request->content,
+            'points' => $request->points,
+        ]);
+
+        // Delete old choices
+        $question->choices()->delete();
+
+        // Create new choices
+        foreach ($request->choices as $index => $choiceContent) {
+            Choice::create([
+                'question_id' => $question->id,
+                'content' => $choiceContent,
+                'is_correct' => ($index == $request->correct),
+            ]);
+        }
+
+        return redirect()->route('faculty.quizzes.show', $quiz)->with('success', 'Question updated!');
+    }
 }
